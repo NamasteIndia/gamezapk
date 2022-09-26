@@ -1,0 +1,11 @@
+<%    
+    var category = (category) ? category : {};
+    var homeUrl = (page.curLang.ismain) ? domain : `${domain}/${page.curLang.id}`; 
+    var catlang = category.CateLang || [];    
+    var title = (catlang.length>0) ? catlang[0].title : category.title;
+    var isRingtone = (isRingtone) ? isRingtone : false;
+    var permalink = (isRingtone) ? `${homeUrl}/ringtones/${category.slug}/` : `${homeUrl}/${category.fullslug}/`;
+%>
+<a class="small text-truncate d-block" href="<%=permalink%>" title="<%-title%>">
+    <span><%-title%></span>
+</a>

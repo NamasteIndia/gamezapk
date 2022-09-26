@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="<%=page.curLang.id%>">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <meta name="googlebot" content="noindex">
+    <meta name="googlebot-news" content="nosnippet">
+    <meta name="robots" content="noindex, nofollow">
+    <%-page.seoMeta%>    
+    <%
+        try{
+            var seoSchema = (page.seoSchema && page.seoSchema.length > 0) ? `[${page.seoSchema}]` : "";
+            var seoSchemaArr = (seoSchema.length > 0) ? JSON.parse(seoSchema) : [];
+            seoSchemaArr.forEach(schemaDom => {
+                var schemaText = JSON.stringify(schemaDom) || "";
+                if(schemaText.length > 2){
+                    var schemaItem = `<script type="application/ld+json">${schemaText}</script>`;
+    %>
+                <!-- Schema -->
+                <%- schemaItem %>
+    <%
+                }
+            });
+        }catch(err){
+    %>
+            <%-(page.seoSchema && 1==1) ? `<script type="application/ld+json">{"@context":"https://schema.org","@graph":[${page.seoSchema}]}</script>` : ""%>
+    <%
+            console.log("Error parse JSON")
+        }
+    %>
+    <link rel="icon" href="//assets/image/favicon.png" data-spai-eager="1" sizes="32x32">
+    <link rel="icon" href="//assets/image/favicon.png" data-spai-eager="1" sizes="192x192">
+    <link rel="stylesheet" href="/assets/js/owl/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <script>
+        var domain = "<%=domain%>",
+            token = "<%=(session.ajaxpagetoken)?session.ajaxpagetoken:''%>",
+            langid = `<%=(page.curLang && page.curLang.id) ? page.curLang.id : "en"; %>`,
+            ismainlang = `<%=(page.curLang && page.curLang.id) ? page.curLang.ismain : false; %>`,
+            ldomain = (ismainlang) ? domain : `${domain}/${langid}`;
+    </script>
+    <%
+        var adspagename = (adspagename) ? adspagename : "",
+            adsredirect = (adsredirect) ? adsredirect : false,
+            adspost = {},
+            adspage = {},
+            adsapk = {},
+            adsShowManager = {};
+        if(adspagename == "pagedownload"){
+            adspost = (page.apk) ? page.apk : {};
+            adspage = (adspost.Ads) ? adspost.Ads : {};
+            adsapk = (adspost.apk) ? adspost.apk : {};
+            adsShowManager.showads = (!adspost.offadsall && !adspost.offadsdownload && !adspage.offads);
+            adsShowManager.slot1 = adspage.slot5;
+            adsShowManager.slot2 = adspage.slot6;
+            adsShowManager.slot3 = adspage.slot3;
+            adsShowManager.slot4 = adspage.slot4;
+        }else{
+            adspost = (page.pageContent) ? page.pageContent : {};
+            adspage = (adspost.Ads) ? adspost.Ads : {};
+            adsShowManager.showads = (!adspost.offads && !adspost.offadsall && !adspage.offads);
+            adsShowManager.slot1 = adspage.slot1;
+            adsShowManager.slot2 = adspage.slot2;
+            adsShowManager.slot3 = adspage.slot3;
+            adsShowManager.slot4 = adspage.slot4;
+            if(adspagename == "pagehome"){
+                adsShowManager.slot1 = adspost.adsslot1;
+                adsShowManager.slot2 = adspost.adsslot2;
+                adsShowManager.slot3 = adspost.adsslot3;
+                adsShowManager.slot4 = adspost.adsslot4;
+            }
+        }
+        adsShowManager.adscode = (adspage.adscode) ? adspage.adscode : "";
+        adsShowManager.islazy =  (adspage.islazy) ? adspage.islazy : false;
+        // Gan ma cho bien global
+        page.adsShowManager = adsShowManager;
+    %>
+    <script>
+        var showads = ("<%=(adsShowManager.showads)?adsShowManager.showads:false%>" == "true");
+        var adscode = "<%=(adsShowManager.adscode)?adsShowManager.adscode:'';%>";
+        var adslazy = ("<%=(adsShowManager.islazy)?adsShowManager.islazy:false;%>" == "true");
+		// Lazyload header
+        var adsheader = "<%=(adsheader && adsheader.adscode) ? adsheader.adscode : '';%>";
+        var adsheaderLazy = "<%=(adsheader && adsheader.islazy) ? adsheader.islazy : false;%>";
+		// End lazyload header
+        var hasWebP = !1;
+        !function() {
+            var A = new Image;
+            A.onload = function() {                
+                hasWebP = !!(A.height > 0 && A.width > 0)
+            }, A.onerror = function() {
+                hasWebP = !1
+            }, A.src = "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA"            
+        }();        
+        function lazyImage(lzl) {
+            return function(e) {
+                var observer,
+                    options = {
+                        rootMargin: "0px",
+                        threshold: 0.05
+                    },
+                    allTheLazyImages = document.querySelectorAll("." + lzl);
+                function lazyLoader(e) {
+                    e.forEach(function(e) {
+                        e.intersectionRatio > 0 && lazyLoadImage(e.target);
+                    });
+                }
+                function lazyLoadImage(e) {
+                    e.onload = function() {
+                        e.classList.remove(lzl);
+                    };
+                    e.dataset.lazybackground && (e.style.backgroundImage = "url(".concat(e.dataset.lazybackground, ")")), e.getAttribute("data-src") && ((e.src = hasWebP && -1 != e.dataset.src.indexOf("googleusercontent.com") ? e.dataset.src + "-rw" : e.dataset.src), "IntersectionObserver" in window && observer.unobserve(e));
+                }
+                if("IntersectionObserver" in window)(observer = new IntersectionObserver(lazyLoader, options)), allTheLazyImages.forEach(function(e) {
+                    observer.observe(e);
+                });
+                else for (var i = 0; i < allTheLazyImages.length; i++) lazyLoadImage(allTheLazyImages[i]);
+            }
+        }
+        function lazyScript(c, e) {
+            var n = document.createElement("script");
+            n.async = !0, e && (n.onload = e), document.head.appendChild(n), n.src = c
+        }
+        function lazyAds(lzl) {
+            return function(e) {
+                var observer;
+                var options = {
+                    rootMargin: "0px",
+                    threshold: 0.05
+                };        
+                var allTheLazyAds = document.querySelectorAll("." + lzl);
+                function lazyLoader(e) {
+                    e.forEach(function(e) {
+                        e.intersectionRatio > 0 && lazyLoadAds(e.target);
+                    });
+                }
+                function lazyLoadAds(e) {
+                    "IntersectionObserver" in window && observer.unobserve(e);
+                    e.classList.remove(lzl);
+                    var codeName = e.id;
+                    googletag.cmd.push(function() {
+                        googletag.display(codeName);
+                        googletag.pubads().refresh([window.__gptslot__[codeName]]);
+                    });
+                }
+                if ("IntersectionObserver" in window)(observer = new IntersectionObserver(lazyLoader, options)), allTheLazyAds.forEach(function(e) {
+                    observer.observe(e);
+                });
+                else for (var i = 0; i < allTheLazyAds.length; i++) lazyLoadAds(allTheLazyAds[i]);
+            };
+        }
+        var lazyLoad = false;
+        function onLazyLoad(){
+            if (lazyLoad === true) return;
+            lazyLoad = true;
+            document.removeEventListener('scroll', onLazyLoad);
+            document.removeEventListener('mousemove', onLazyLoad);
+            document.removeEventListener('mousedown', onLazyLoad);
+            document.removeEventListener('touchstart', onLazyLoad);
+            //ADS script            
+            //lazyScript("//securepubads.g.doubleclick.net/tag/js/gpt.js");
+            if(showads && adslazy && adscode.length > 0){
+				if(adsheader!="" && adsheaderLazy=="true"){
+                    (function() {
+                        var n = document.createElement("script");
+                        n.async = !0, n.setAttribute('data-ad-client', adsheader), document.head.appendChild(n), n.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
+                    })();
+                }
+                (function() {
+                    var n = document.createElement("script");
+                    n.async = !0, n.setAttribute('data-ad-client', adscode), document.head.appendChild(n), n.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
+                })();
+            }
+            setTimeout(function() {
+                !function(e, a, t, n, g, c, o) {
+                    e.GoogleAnalyticsObject = g, e.ga = e.ga || function() {
+                        (e.ga.q = e.ga.q || []).push(arguments)
+                    }, e.ga.l = 1 * new Date, c = a.createElement(t), o = a.getElementsByTagName(t)[0], c.async = 1, c.src = "https://www.google-analytics.com/analytics.js", o.parentNode.insertBefore(c, o)
+                }(window, document, "script", 0, "ga"), ga("create", "UA-156911014-1", "auto"), ga("send", "pageview");
+                // Tracking error page
+                window.onerror = function(message, source, lineno, colno, error) {
+                    var label = location.href + ': ' + message + ' (' + source + ':' + lineno + (colno ? ':' + colno : '') + ')';
+                    //console.log(label)
+                    ga('send', 'event', 'performance', 'error', label, 1, {
+                        nonInteraction: true
+                    });
+                    window.onerror = null;
+                };
+            }, 1)
+        }
+        document.addEventListener("scroll", onLazyLoad),
+        document.addEventListener("mousemove", onLazyLoad),
+        document.addEventListener("mousedown", onLazyLoad),
+        document.addEventListener("touchstart", onLazyLoad),
+        document.addEventListener("load", function() {
+            document.body.clientHeight != document.documentElement.clientHeight && 0 == document.documentElement.scrollTop && 0 == document.body.scrollTop || onLazyLoad()
+        });
+    </script>
+    <%
+        if(adsheader!==null && adsheader.adscode !== "" && adsheader.islazy==false){
+    %>
+    <script async data-ad-client="<%=adsheader.adscode%>" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <%
+        }
+    %>
+    <%
+        if(adsShowManager.showads && !adsShowManager.islazy && adsShowManager.adscode.length > 0){
+    %>
+    <script async data-ad-client="<%=adsShowManager.adscode%>" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <%
+        }
+    %>
+</head>
+<%
+    var page = (typeof page !== "undefined") ? page : {};
+    var homeUrl = (page.curLang.ismain) ? domain : `${domain}/${page.curLang.id}`;
+    var pageContent = (page.pageContent) ? page.pageContent : {};
+        var dptype = (pageContent.posttype) ? "p" : "";
+        dptype = (pageContent.catetype) ? "c" : dptype;
+        var dpid = (pageContent.id) ? pageContent.id : "",
+        className = (className) ? className : '';
+%>
+<body class="<%=className%>">
+    <div id="adminBar" data-pid="<%=dpid%>" data-ptype="<%=dptype%>"></div>
+
+    <div class=" main-container" style="height: auto !important;">
+    
+        <!-- Header -->
+        <header>
+          <div class="color-wrap">
+            <div class="wrapper section" id="top-bar">
+              <div class="widget LinkList" data-version="2" id="LinkList301">
+                <ul class="social-static social">
+                  <li><a href="#" rel="noreferrer"
+                      target="_blank"><i class="fa fa-telegram"></i></a></li>
+                  <li><a href="#" rel="noreferrer"
+                      target="_blank"><i class="fa fa-instagram"></i></a></li>
+                  <li><a href="#" rel="noreferrer"
+                      target="_blank"><svg class="fa-messenger">
+                        <use xlink:href="#ic-messenger"></use>
+                      </svg></a></li>
+                  <li><a href="#" rel="noreferrer"
+                      target="_blank"><i class="fa fa-facebook"></i></a></li>
+                  <li><a href="#"
+                      rel="noreferrer" target="_blank"><i class="fa fa-youtube"></i></a></li>
+                  <li><a href="#" rel="noreferrer"
+                      target="_blank"><i class="fa fa-twitter"></i></a></li>
+                </ul>
+              </div>
+              <div class="widget PageList" data-version="2" id="PageList301">
+                <nav class="menu">
+                  <ul>
+                    <li class="selected">
+                      <a href="#">الرئيسية</a>
+                    </li>
+                    <li>
+                      <a href="#">اتفاقية
+                        الاستخدام</a>
+                    </li>
+                    <li>
+                      <a href="#">سياسة
+                        الخصوصية - Privacy Policy</a>
+                    </li>
+                    <li>
+                      <a href="#">إتصل
+                        بنا</a>
+                    </li>
+                  </ul>
+                </nav>
+                <div class="menu-res"><i class="fa fa-bars"></i>
+                  <nav class="menu-res-wrap">
+                    <ul class="notr" style="display:none">
+                      <li><a href="#">الرئيسية</a></li>
+                      <li><a
+                          href="#">اتفاقية
+                          الاستخدام</a></li>
+                      <li><a
+                          href="#">سياسة
+                          الخصوصية - Privacy Policy</a></li>
+                      <li><a href="#">إتصل
+                          بنا</a></li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+              <div class="widget HTML" data-version="2" id="HTML301">
+                <div class="search">
+                  <form action=""
+                    autocomplete="off" spellcheck="false"><span><i class="fa fa-search"></i></span><input name="q"
+                      placeholder="بحث هذه المدونة الإلكترونية" type="text"></form>
+                </div>
+                <script
+                  type="text/javascript">/*<![CDATA[*/document.querySelector('.search form span').onclick = function () { if (this.classList.length) { this.classList.remove('open-search') } else { this.classList.add('open-search') } };/*]]>*/</script>
+              </div>
+            </div>
+          </div>
+          <div class="wrapper section" id="head-sec">
+            <div class="widget Header" data-version="1" id="Header1">
+              <div class="logo"><a class="img-logo"
+                  href="#"><img
+                    alt="تحميل ألعاب APK أندرويد مهكرة - GamezApk"
+                    src="/assets/image/heedr.png"
+                    title="تحميل ألعاب APK أندرويد مهكرة - GamezApk"></a>
+                <h1 class="hide">تحميل ألعاب APK أندرويد مهكرة - GamezApk</h1>
+              </div>
+            </div>
+            
+          </div>
+          <div class="wrapper section" id="menu-bar">
+            <div class="widget LinkList" data-version="2" id="LinkList302">
+              <a class="res-home" data-trans="1"
+                href="#">الرئيسية</a>
+              <nav class="menu-bar">
+                <div class="menu-bar-res"><i class="fa fa-bars"></i></div>
+                <ul class="notr" itemscope="itemscope" itemtype="http://www.schema.org/SiteNavigationElement">
+                  <li><a class="home" href="#"><b
+                        data-trans="1">الرئيسية</b></a></li>
+                  <li data-title="العاب" class="drop-menu-st"><a
+                      href="#"
+                      itemprop="url"><span itemprop="name">العاب</span></a>
+                    <ul>
+                      <li data-title="_الإثارة والمغامرة"><a
+                          href="#">الإثارة
+                          والمغامرة</a></li>
+                      <li data-title="_سباق"><a
+                          href="#">سباق</a>
+                      </li>
+                      <li data-title="_الإستراتيجية"><a
+                          href="">الإستراتيجية</a>
+                      </li>
+                      <li data-title="_ألعاب كلاسيكية"><a
+                          href="">ألعاب
+                          كلاسيكية</a></li>
+                      <li data-title="_أنمي"><a
+                          href="">أنمي</a>
+                      </li>
+                      <li data-title="_مغامرات"><a
+                          href="">مغامرات</a>
+                      </li>
+                      <li data-title="_أكشن وقتال"><a
+                          href="">أكشن
+                          وقتال</a></li>
+                      <li data-title="_الألغاز"><a
+                          href="">الألغاز</a>
+                      </li>
+                      <li data-title="_ألعاب حركة"><a
+                          href="">ألعاب
+                          حركة</a></li>
+                      <li data-title="_خفيفة"><a
+                          href="">خفيفة</a>
+                      </li>
+                      <li data-title="_أركيد"><a
+                          href="">أركيد</a>
+                      </li>
+                      <li data-title="_المحاكاة"><a
+                          href="">المحاكاة</a>
+                      </li>
+                      <li data-title="_الورق"><a
+                          href="">الورق</a>
+                      </li>
+                      <li data-title="_رياضة"><a
+                          href="">رياضة</a>
+                      </li>
+                      <li data-title="_العاب بنات"><a
+                          href="">العاب
+                          بنات</a></li>
+                    </ul>
+                  </li>
+                  <li data-title="تطبيقات" class="drop-menu-st"><a
+                      href=""
+                      itemprop="url"><span itemprop="name">تطبيقات</span></a>
+                    <ul>
+                      <li data-title="_مدفوعة"><a
+                          href="">مدفوعة</a>
+                      </li>
+                      <li data-title="_مجانيه"><a
+                          href="">مجانيه</a>
+                      </li>
+                      <li data-title="_اجتماعي"><a
+                          href="">اجتماعي</a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li data-title="أخبار"><a
+                      href=""
+                      itemprop="url"><span itemprop="name">أخبار</span></a></li>
+                  <li data-title="ببجي" class="drop-menu-st"><a
+                      href=""
+                      itemprop="url"><span itemprop="name">ببجي</span></a>
+                    <ul>
+                      <li data-title="_نبذات ببجي"><a
+                          href="">نبذات
+                          ببجي</a></li>
+                      <li data-title="_أسماء ببجي"><a
+                          href="">أسماء
+                          ببجي</a></li>
+                      <li data-title="_هاك ببجي النسخة العالمية"><a
+                          href="">هاك
+                          ببجي النسخة العالمية</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+          <i class="clear"></i>
+        </header>
+
+
+
+    <!-- <header class="bg-header bg-white fixed-top">
+        <div class="container header-flex">
+            <button class="btn-nav-menu" type="button">
+                <svg class="svg-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path
+                        d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z">
+                    </path>
+                </svg>
+            </button>
+            <div>
+                <a class="d-flex mr-top" id="text-logo" href="<%=homeUrl%>" rel="home">
+                    <img src="//assets/image/favicon.png" alt="">
+                <%
+                    if(pageContent.slug === 'home'){
+                %>
+                    <h1 class="logo-text" id="text-logo">MODYOLO.APP</h1>
+                <%
+                    }
+                %>
+                <%
+                    if(pageContent.slug !== 'home'){
+                %>
+                    <h2 class="logo-text" id="text-logo">MODYOLO.APP</h2>
+                <%
+                    }
+                %>
+                </a>
+            </div>
+            <nav class="site-nav">
+                <div class="btn-close-hidden">
+                    <button class="bg-transparent" type="button">
+                        <svg class="svg-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                            <path
+                                d="M193.94 256L296.5 153.44l21.15-21.15c3.12-3.12 3.12-8.19 0-11.31l-22.63-22.63c-3.12-3.12-8.19-3.12-11.31 0L160 222.06 36.29 98.34c-3.12-3.12-8.19-3.12-11.31 0L2.34 120.97c-3.12 3.12-3.12 8.19 0 11.31L126.06 256 2.34 379.71c-3.12 3.12-3.12 8.19 0 11.31l22.63 22.63c3.12 3.12 8.19 3.12 11.31 0L160 289.94 262.56 392.5l21.15 21.15c3.12 3.12 8.19 3.12 11.31 0l22.63-22.63c3.12-3.12 3.12-8.19 0-11.31L193.94 256z">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+                <ul class="nav-menu">
+                    <%-page.menuHeader%>
+                </ul>
+            </nav>
+            <div class="site-overlay"></div>
+            <div style="width: 300px">
+                <form class="form-search" method="GET" action="<%=homeUrl%>/?s=/">
+                    <div class="input-group">
+                        <input class="form-control form-control-sm" type="text" name="s" placeholder="Search">
+                        <div class="input-group-append">
+                            <button class="btn btn-light btn-sm" type="submit">
+                                <svg class="svg-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                    <path
+                                        d="M508.5 468.9L387.1 347.5c-2.3-2.3-5.3-3.5-8.5-3.5h-13.2c31.5-36.5 50.6-84 50.6-136C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c52 0 99.5-19.1 136-50.6v13.2c0 3.2 1.3 6.2 3.5 8.5l121.4 121.4c4.7 4.7 12.3 4.7 17 0l22.6-22.6c4.7-4.7 4.7-12.3 0-17zM208 368c-88.4 0-160-71.6-160-160S119.6 48 208 48s160 71.6 160 160-71.6 160-160 160z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </header> -->

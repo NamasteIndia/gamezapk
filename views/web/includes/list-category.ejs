@@ -4,11 +4,11 @@
 <%
         categories.forEach(c => {
     %>
-        <div class="col-6 mb-3">
+        <li>
             
             <%- include("category", {category: c}); %>
             
-        </div>
+        </li>
 <%
         })
     %>

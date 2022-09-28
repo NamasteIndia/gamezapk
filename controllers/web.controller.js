@@ -467,13 +467,6 @@ async function execHomePage(req, res) {
       pageContent.id,
       ''
     );
-    var menuFooterRight = await menuController.getMenuFontEnd(
-      curLang,
-      'menu-footer-right',
-      'home',
-      pageContent.id,
-      ''
-    );
     // Show posts to home
     var cateGameIds = await Category.findAllChildIds(appConf.gameId || 0);
     cateGameIds.push(appConf.gameId || 0);
@@ -555,7 +548,6 @@ async function execHomePage(req, res) {
       seoSchema: arrSchema.join(','),
       menuHeader: menuHeader,
       menuFooter: menuFooter,
-      menuFooterRight: menuFooterRight,
       pageContent: pageContent,
       homeBestGames: homeBestGames,
       homeBestApps: homeBestApps,
@@ -1149,13 +1141,6 @@ async function execPostPage(req, res) {
       postId,
       curUrl
     );
-    var menuFooterRight = await menuController.getMenuFontEnd(
-      curLang,
-      'menu-footer-right',
-      'post',
-      postId,
-      curUrl
-    );
     var breadcrumbs = await breadcumbController.createBreadcumb(
       4,
       curLang,
@@ -1168,6 +1153,8 @@ async function execPostPage(req, res) {
         rolename: "Administrator"
       },
     });
+
+    var homeApkChoices = await postController.getApkChoices('updated', curLang, 1, 8);
     // SEO Meta tags
     var arrLangsExists = await Post.findPostLangAvailable(curLang.id, pageContent.id);
     var seoTitle = pageContent.seotitle == '' ? pageContent.title : pageContent.seotitle;
@@ -1415,7 +1402,6 @@ async function execPostPage(req, res) {
       breadcrumbs: breadcrumbs,
       menuHeader: menuHeader,
       menuFooter: menuFooter,
-      menuFooterRight: menuFooterRight,
       catesSidebar: catesSidebar,
       appsSidebar: appsSidebar,
       apkSidebar: apkSidebar,
@@ -1428,7 +1414,8 @@ async function execPostPage(req, res) {
       toc: toc.toc || [],
       tags: tags ? tags : [],
       userRole: userRole,
-      role: role
+      role: role,
+      homeApkChoices: homeApkChoices
     };
     res.render(renderText, { page: page });
   } catch (err) {
@@ -1491,13 +1478,8 @@ async function execCategoryPage(req, res) {
       pageContent.id,
       curUrl
     );
-    var menuFooterRight = await menuController.getMenuFontEnd(
-      curLang,
-      'menu-footer-right',
-      'cate',
-      pageContent.id,
-      curUrl
-    );
+
+    var homeApkChoices = await postController.getApkChoices('updated', curLang, 1, 8);
     // Get Data Apk
     var cateSelectionIds = await Category.findAllChildIds(pageContent.id);
     cateSelectionIds = cateSelectionIds.map((id) => parseInt(id));
@@ -1608,7 +1590,6 @@ async function execCategoryPage(req, res) {
       pageContent: pageContent,
       menuHeader: menuHeader,
       menuFooter: menuFooter,
-      menuFooterRight: menuFooterRight,
       apkNewUpdate: apkNewUpdate,
       apkSidebar: apkSidebar,
       apkSidebarLast: apkSidebarLast,
@@ -1619,7 +1600,8 @@ async function execCategoryPage(req, res) {
       breadcrumbs: breadcrumbs,
       sort: sort,
       userRole: userRole,
-      role: role
+      role: role,
+      homeApkChoices: homeApkChoices
     };
     res.render(renderText, { page: page });
   } catch (err) {

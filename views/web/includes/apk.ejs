@@ -13,7 +13,21 @@
     var apkVersion = (apk.version) ? apk.version : __("textUnknow");
     var apkSize = (apk.apk_size) ? apk.apk_size : __("textUnknow");
 %>
-    <a class="text-body border rounded overflow-hidden d-block h-100 position-relative archive-post"
+
+<a href="<%=permalink%>" title="<%=title%>" class="img-wrap">
+    <img data-src="<%=thumbnail%>" src="<%=thumbnail%>" alt="<%=title%>">
+  </a>
+  <h2>
+    <a href="<%=permalink%>"><%=title%></a>
+  </h2>
+  <div class="details">
+    <span class="post-date">
+      <i class="fa fa-calendar-times-o"></i>14 فبراير
+      2019
+    </span>
+  </div>
+
+    <!-- <a class="text-body border rounded overflow-hidden d-block h-100 position-relative archive-post"
             href="<%=permalink%>" title="<%=title%>">
             <div class="d-flex" style="padding: 0.5rem;">
                 <div class="flex-shrink-0 mr-2" style="width: 3.75rem;">
@@ -48,4 +62,4 @@
                     </div>
                 </div>
             </div>
-    </a>
+    </a> -->

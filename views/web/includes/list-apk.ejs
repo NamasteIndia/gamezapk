@@ -3,7 +3,7 @@
     posts.forEach(p => {
         var post = functions.postMaping(p) || post;
 %>
-    <div class="col-12 col-md-6 col-xl-4 mb-3">
+    <div>
         <%- include("apk", {post: post}); %>
     </div>
 <%

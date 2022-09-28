@@ -6,6 +6,5 @@
     var isRingtone = (isRingtone) ? isRingtone : false;
     var permalink = (isRingtone) ? `${homeUrl}/ringtones/${category.slug}/` : `${homeUrl}/${category.fullslug}/`;
 %>
-<a class="small text-truncate d-block" href="<%=permalink%>" title="<%-title%>">
-    <span><%-title%></span>
-</a>
+
+<a href="<%=permalink%>" title="<%-title%>"><%-title%></a>

@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'modyolo',
+      name: 'gamezapk',
       script: 'node app.js',
       instances: 1,
       autorestart: true,

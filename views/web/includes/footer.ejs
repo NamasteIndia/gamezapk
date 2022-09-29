@@ -21,9 +21,11 @@
               <svg class="impo"><use xlink:href="#ic-squeeze"></use></svg>
             </a>
             <div onclick="topFunction()" class="scroll-top fa fa-chevron-up"></div>
-            <span>© جميع الحقوق محفوظة</span>
-            <a href="<%=homeUrl%>">تحميل ألعاب APK أندرويد مهكرة
-              - GamezApk</a>
+            <span>© Copyright 2017 - <%- new Date().getFullYear(); %>.<%= __("copyright").end%>.</span>
+            <a href="<%=homeUrl%>">
+              <%= __("copyright").prefix%> <span class="siteName"><%=sitename%></span>
+            </a>
+            <span></span>
           </div>
           
         </div>
@@ -58,7 +60,8 @@
         </path>
       </symbol>
       
-    </svg></div>
+    </svg>
+  </div>
   
   <!-- jQuery -->
     <script>

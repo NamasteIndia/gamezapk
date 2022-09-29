@@ -1,7 +1,7 @@
 {
   "app": {
-    "siteName": "modyolo.app",
-    "siteSlug": "modyolo",
+    "siteName": "gamezapk.tk",
+    "siteSlug": "gamezapk",
     "apkText": " Apk",
     "modText": " Mod",
     "gameSlug": "games",
@@ -12,14 +12,14 @@
     "langLeechDescription": "Khac en langLeech = ?lang=pt"
   },
   "server": {
-    "port": 8686,
-    "domain": "https://modyolo.app",
+    "port": 8986,
+    "domain": "https://gamezapk.tk",
     "dashboard": "admin",
     "secret": "hm-secret-keyznfe"
   },
   "database": {
     "host": "127.0.0.1",
-    "database": "modyolodb",
+    "database": "gamezapkdb",
     "username": "root",
     "password": "Yopy@159753",
     "dialect": "mysql",

@@ -1,10 +1,10 @@
 const md5 = require('md5');
-const domainName = 'modyolo.app';
-const siteName = 'modyolo';
-const siteAlterName = 'Modyolo';
+const domainName = 'gamezapk.tk';
+const siteName = 'gamezapk';
+const siteAlterName = 'GamezApk';
 const emailSupport = `support@${domainName}`;
 const listSocials = `[
-    "https://www.facebook.com/modyoloapp"
+    "https://www.facebook.com/gamezapk"
 ]`;
 
 async function Organization(curLang, Languages, homeContent) {

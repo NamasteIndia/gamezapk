@@ -4271,6 +4271,11 @@ footer .rand-content h2 a {
     content: "\f100"
 }
 
+.breadcumb ul {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
 /*=================
 >Homepage
 ===================*/

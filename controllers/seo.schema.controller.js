@@ -1,7 +1,7 @@
 const md5 = require('md5');
-const domainName = 'gamezapk.tk';
-const siteName = 'gamezapk';
-const siteAlterName = 'GamezApk';
+const domainName = 'gamezapktest.tk';
+const siteName = 'gamezapktest';
+const siteAlterName = 'GamezApkTest';
 const emailSupport = `support@${domainName}`;
 const listSocials = `[
     "https://www.facebook.com/gamezapk"

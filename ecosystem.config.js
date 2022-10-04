@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'gamezapk',
+      name: 'gamezapktest',
       script: 'node app.js',
       instances: 1,
       autorestart: true,

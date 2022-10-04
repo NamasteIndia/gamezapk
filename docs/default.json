@@ -1,6 +1,6 @@
 {
   "app": {
-    "siteName": "gamezapk.tk",
+    "siteName": "gamezapktest.tk",
     "siteSlug": "gamezapk",
     "apkText": " Apk",
     "modText": " Mod",
@@ -13,7 +13,7 @@
   },
   "server": {
     "port": 8689,
-    "domain": "https://gamezapk.tk",
+    "domain": "https://gamezapktest.tk",
     "dashboard": "admin",
     "secret": "hm-secret-keyznfe"
   },

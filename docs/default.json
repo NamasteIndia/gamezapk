@@ -12,7 +12,7 @@
     "langLeechDescription": "Khac en langLeech = ?lang=pt"
   },
   "server": {
-    "port": 8986,
+    "port": 8689,
     "domain": "https://gamezapk.tk",
     "dashboard": "admin",
     "secret": "hm-secret-keyznfe"
